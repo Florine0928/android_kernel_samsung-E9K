@@ -63,7 +63,7 @@ export AIK=$DIR/E9K-Tools/A.I.K
 export RAMDISK=$DIR/E9K-Tools/Ramdisk
 
 # Compiled image name and location (Image/zImage)
-export KERNEL=$DIR/arch/$ARCH/boot/Image.gz
+export KERNEL=$DIR/arch/$ARCH/boot/Image
 
 # Compiled DTB - Default Starlte
 export CDTB="arch/arm64/boot/dts/exynos/exynos9810-starlte_eur_open_26.dtb"
@@ -71,6 +71,8 @@ export CDTB="arch/arm64/boot/dts/exynos/exynos9810-starlte_eur_open_26.dtb"
 # defconfig dir
 export DEFCONFIG=$DIR/arch/$ARCH/configs
 
+# Unset some vars for Make Boot.img
+unset $MAKEBOOT
 ########################################################################
 #                                                                      #
 ########################################################################
@@ -78,23 +80,20 @@ export DEFCONFIG=$DIR/arch/$ARCH/configs
 # ExremeXT lurks in this script
 usage() {
     echo "Usage: $0 [-d <platform>] [-m <clean/dirty>]"
-    echo "Example Usage: $0 -d S9 -m dirty"
+    echo "Example Usage: $0 -d S9 -m dirty -e"
     echo "Options:"
     echo "  -b          Build Kernel for S9,S9+,N9"
     echo "  -m          Build Mode (clean/dirty"
+    echo "  -e          Make boot.img"
     echo "  -h          Display this help message"
     exit 1
 }
 
 # Parse options
-while getopts "m:b:h" opt; do
+while getopts "em:b:h" opt; do
     case $opt in
         b)
             arg=$OPTARG  # Capture the argument for -b
-            if [[ -z "$arg" ]]; then
-                echo "Error: No argument provided for -b."
-                usage
-            fi
 
             if [[ "$arg" == "S9" ]]; then
                 echo "Building kernel for: $arg"
@@ -112,12 +111,11 @@ while getopts "m:b:h" opt; do
                 echo "Invalid argument for -b: Defaulting to S9"
             fi
             ;;
+        e)
+                export MAKEBOOT="true"
+            ;;
         m)
             arg2=$OPTARG  # Capture the argument for -m
-            if [[ -z "$arg2" ]]; then
-                echo "Error: No argument provided for -m."
-                usage
-            fi
 
             if [[ "$arg2" == "clean" ]]; then
                 unset MODE
@@ -131,9 +129,6 @@ while getopts "m:b:h" opt; do
             ;;
         h)
             # Print Help Option (ex: ./init.sh -h)
-            usage
-            ;;
-        *)
             usage
             ;;
     esac
@@ -169,12 +164,10 @@ make $DEVICE
 build() {
     if [[ "$MODE" == "dirty" ]]; then
     #If in dirty mode then make kernel while not cleaning workdir 
-    make $DEVICE
     make -j$(nproc)
     else
     # If not in dirty mode then clear workdir and make kernel
     make clean && make mrproper
-    make $DEVICE
     make -j$(nproc)
     fi
 }
@@ -230,6 +223,10 @@ defconfig
 # Make Kernel
 build
 
+if [[ "$MAKEBOOT" == "true" ]]; then
 # Creates boot.img which will appear in E9K-Tools/Product folder
 PACK_BOOT_IMG
+else
+echo "boot.img won't be made"
+fi
 
