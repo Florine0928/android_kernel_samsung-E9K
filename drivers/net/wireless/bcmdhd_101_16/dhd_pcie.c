@@ -2599,13 +2599,13 @@ static int concate_revision_bcm4359(dhd_bus_t *bus, char *fw_path, char *nv_path
 	chip_ver = bus->sih->chiprev;
 	if (chip_ver == 4) {
 		DHD_ERROR(("----- CHIP 4359 B0 -----\n"));
-		strncat(chipver_tag, "_b0", strlen("_b0"));
+		strlcat(chipver_tag, "_b0", strlen("_b0"));
 	} else if (chip_ver == 5) {
 		DHD_ERROR(("----- CHIP 4359 B1 -----\n"));
-		strncat(chipver_tag, "_b1", strlen("_b1"));
+		strlcat(chipver_tag, "_b1", strlen("_b1"));
 	} else if (chip_ver == 9) {
 		DHD_ERROR(("----- CHIP 4359 C0 -----\n"));
-		strncat(chipver_tag, "_c0", strlen("_c0"));
+		strlcat(chipver_tag, "_c0", strlen("_c0"));
 	} else {
 		DHD_ERROR(("----- Unknown chip version, ver=%x -----\n", chip_ver));
 		return -1;
@@ -2626,7 +2626,7 @@ static int concate_revision_bcm4359(dhd_bus_t *bus, char *fw_path, char *nv_path
 			 * loading B90S FW force for initial MFG boot up.
 			*/
 			if (chip_ver == 5) {
-				strncat(fw_path, "_b90s", strlen("_b90s"));
+				strlcat(fw_path, "_b90s", strlen("_b90s"));
 			}
 			strcat(fw_path, chipver_tag);
 			strcat(nv_path, chipver_tag);
@@ -2670,11 +2670,11 @@ concate_revision_from_cisinfo(dhd_bus_t *bus, char *fw_path, char *nv_path)
 	if (info) {
 #ifdef BCM4361_CHIP
 		if (is_murata_fem) {
-			strncat(nv_path, NVRAM_FEM_MURATA, strlen(NVRAM_FEM_MURATA));
+			strlcat(nv_path, NVRAM_FEM_MURATA, strlen(NVRAM_FEM_MURATA));
 		}
 #endif /* BCM4361_CHIP */
-		strncat(nv_path, info->nvram_ext, strlen(info->nvram_ext));
-		strncat(fw_path, info->fw_ext, strlen(info->fw_ext));
+		strlcat(nv_path, info->nvram_ext, strlen(info->nvram_ext));
+		strlcat(fw_path, info->fw_ext, strlen(info->fw_ext));
 	} else {
 		DHD_ERROR(("%s:failed to find extension for nvram and firmware\n", __FUNCTION__));
 		ret = BCME_ERROR;
@@ -2692,10 +2692,10 @@ concate_revision_from_cisinfo(dhd_bus_t *bus, char *fw_path, char *nv_path)
 	/* write chiprev into FW tag */
 	if (ret == BCME_OK) {
 		if (revid == 3) {
-			strncat(fw_path, A0_REV, strlen(fw_path));
+			strlcat(fw_path, A0_REV, strlen(fw_path));
 			DHD_ERROR(("%s: fw_path : %s\n", __FUNCTION__, fw_path));
 		} else if (revid == 1) {
-			strncat(fw_path, B0_REV, strlen(fw_path));
+			strlcat(fw_path, B0_REV, strlen(fw_path));
 			DHD_ERROR(("%s: fw_path : %s\n", __FUNCTION__, fw_path));
 		} else {
 			DHD_ERROR(("%s: INVALID CHIPREV %d\n", __FUNCTION__, revid));

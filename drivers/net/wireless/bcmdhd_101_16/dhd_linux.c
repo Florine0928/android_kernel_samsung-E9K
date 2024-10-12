@@ -9019,7 +9019,7 @@ bool dhd_update_fw_nv_path(dhd_info_t *dhdinfo)
 				uint32 padding_size = (uint32)(dhdinfo->nv_path +
 					nv_path_len - sp);
 				memset(sp, 0, padding_size);
-				strncat(dhdinfo->nv_path, ext_tag, strlen(ext_tag));
+				strlcat(dhdinfo->nv_path, ext_tag, strlen(ext_tag));
 				nv_len = strlen(dhdinfo->nv_path);
 				DHD_INFO(("%s: new nvram path = %s\n",
 					__FUNCTION__, dhdinfo->nv_path));

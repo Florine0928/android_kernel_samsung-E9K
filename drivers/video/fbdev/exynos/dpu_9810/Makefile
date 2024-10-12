@@ -4,7 +4,7 @@
 #
 # Licensed under GPLv2
 #
-
+CFLAGS_REMOVE_decon_reg.o := -mgeneral-regs-only
 obj-$(CONFIG_EXYNOS_DPP) += dpp.o
 dpp-y := dpp_drv.o
 obj-$(CONFIG_EXYNOS_MIPI_DSIM) += dsim.o

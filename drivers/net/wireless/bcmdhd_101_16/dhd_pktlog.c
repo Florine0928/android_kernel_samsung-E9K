@@ -988,6 +988,7 @@ dhd_pktlog_filter_pull_forward(dhd_pktlog_filter_t *filter, uint32 del_filter_id
 
 void dhd_pktlog_get_filename(dhd_pub_t *dhdp, char *dump_path, int len)
 {
+	char temp_path[len]; 
 	/* Init file name */
 	bzero(dump_path, len);
 	clear_debug_dump_time(dhdp->debug_dump_time_pktlog_str);
@@ -1016,9 +1017,8 @@ void dhd_pktlog_get_filename(dhd_pub_t *dhdp, char *dump_path, int len)
 		}
 
 	}
-
-	snprintf(dump_path, len, "%s_%s.pcap", dump_path,
-			dhdp->debug_dump_time_pktlog_str);
+  snprintf(temp_path, len, "%s", dump_path); 
+  snprintf(dump_path, len, "%s_%s.pcap", temp_path, dhdp->debug_dump_time_pktlog_str);
 	DHD_ERROR(("%s: pktlog path = %s%s\n", __FUNCTION__, dump_path, FILE_NAME_HAL_TAG));
 	clear_debug_dump_time(dhdp->debug_dump_time_pktlog_str);
 }
