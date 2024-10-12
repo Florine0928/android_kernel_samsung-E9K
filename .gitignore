@@ -39,7 +39,9 @@ Module.symvers
 *.dwo
 *.su
 *.c.[012]*.*
-
+*.img
+E9K-Tools/Product/*
+E9K-Tools/Out/*
 #
 # Top-level generic files
 #
