@@ -128,3 +128,8 @@ arch/arm64/boot/dts/exynos/exynos9810-star2lte_eur_open_20.dtb.reverse.dts
 arch/arm64/boot/dts/exynos/exynos9810-star2lte_eur_open_23.dtb.reverse.dts
 arch/arm64/boot/dts/exynos/exynos9810-star2lte_eur_open_26.dtb.reverse.dts
 log.txt
+
+# Custom 
+*.dtb
+*.dtb.reverse.dts
+scripts/dtbtool_exynos/dtbtool
